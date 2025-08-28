@@ -19,8 +19,7 @@ test.describe('Storyblocks Search App', () => {
     await expect(page.locator('[data-testid="AssetCard"]')).toHaveCount(20);
   });
 
-  // TODO: use a unit test instead
-  test.skip('shows loading state', async ({ page }) => {
+  test('shows loading state', async ({ page }) => {
     await page.goto('/');
 
     await page.fill('input[type="search"]', 'loading');
@@ -30,10 +29,7 @@ test.describe('Storyblocks Search App', () => {
     await expect(page.locator('[data-testid="SearchError"]')).not.toBeVisible();
 
     await expect(
-      page.locator('[data-testid="AssetCardImageSkeleton"]'),
-    ).toBeVisible();
-    await expect(
-      page.locator('[data-testid="AssetCardTextSkeleton"]'),
+      page.locator('[data-testid="LoadingSearchResults"]'),
     ).toBeVisible();
   });
 
