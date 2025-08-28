@@ -32,6 +32,10 @@ npm run dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Assumptions
+
+- **Keywords have no special characters**: Stripped the search input value of everything but letters, numbers, and spaces.
+
 ## Trade-offs
 
 - **Regular `<img>` tags instead of Next.js `Image` component**: Used standard HTML img elements to avoid the complexity of configuring remote image domains for external APIs. This simplifies development at the cost of Next.js image optimizations.
@@ -39,13 +43,9 @@ npm run dev
 - **No deployment setup**: Kept the project local-only to focus on core functionality within the timeboxed scope. While the app could be deployed to platforms like Vercel or Netlify, setting up deployment pipelines and environment variable management would add complexity.
 - **Simple hardcoded mocks instead of MSW**: Used hardcoded conditional mocking rather than a more robust tool like Mock Service Worker (MSW) due to time constraints. MSW would provide better test isolation and more maintainable mocks for a production application.
 - **Single page results only**: To limit scope, the app fetches and displays only the first page of up to 20 search results.
-- **No user id**: For simplicity, requests randomly generate a user_id.
+- **Dynamic user ID generation**: For simplicity, requests randomly generate a user_id.
 - **Keywords only**: The Storyblocks API supports a number of filters and advanced search options, but this application only performs a keyword search with default sorting.
-- one endpoint to reduce complexity
-
-## Assumptions
-
-- **Keywords have no special characters**: Stripped the search input value of everything but letters, numbers, and spaces.
+- **Single endpoint implementation**: Used only the images `search` endpoint to reduce project complexity and stay within scope. While the Storyblocks API offers separate endpoints for asset details, implementing both search and details endpoints would have required additional API route setup, error handling, and state management.
 
 ## Tools & Technologies
 
@@ -54,3 +54,18 @@ npm run dev
 - UI/Design: daisyUI
 - Testing: Playwright
 - AI: Claude (for project structure and development)
+
+## Demo
+
+![App Demo](demo.gif)
+
+The application demonstrates:
+
+- **Image Search**: Search Storyblocks' image library using keywords
+- **Responsive Grid**: Dynamically sized image cards that adapt to screen size while maintaining aspect ratios
+- **Full-Screen Preview**: Click any image to view a full-screen preview with title
+- **Loading States**: Visual feedback during search operations
+- **Error Handling**: Graceful handling of API errors and empty results
+- **Input Sanitization**: Automatically filters special characters from search queries
+
+To run the app locally, follow the Getting Started instructions above.
