@@ -5,14 +5,14 @@ import SearchForm from '@/components/SearchForm';
 import SearchResults from '@/components/SearchResults';
 
 export default function HomePage() {
-  const [results, setResults] = useState<ImageResults>([]);
+  const [results, setResults] = useState<ImageResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>();
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
-    setError(null);
+    setError(undefined);
     setHasSearched(true);
 
     try {
@@ -37,18 +37,32 @@ export default function HomePage() {
     }
   };
 
+  const handleChange = () => {
+    if (isLoading) return;
+
+    if (error) {
+      setError(undefined);
+    }
+    if (results.length === 0) {
+      setHasSearched(false);
+    }
+  };
+
   return (
-    <div>
-      <h1>Storyblocks Search</h1>
+    <div className="container mx-auto p-1 sm:p-2 md:p-4 lg:p-8">
+      <h1 className="text-center text-4xl font-bold font-serif mt-4 mb-4 md:mb-8">
+        Storyblocks Image Search
+      </h1>
 
-      <SearchForm onSearch={handleSearch} isLoading={isLoading} />
-
-      <SearchResults
-        results={results}
+      <SearchForm
+        onSearch={handleSearch}
         isLoading={isLoading}
-        error={error}
-        hasSearched={hasSearched}
+        onChange={handleChange}
       />
+
+      {hasSearched ? (
+        <SearchResults results={results} isLoading={isLoading} error={error} />
+      ) : null}
     </div>
   );
 }

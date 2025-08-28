@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { IoIosSearch as SearchIcon } from 'react-icons/io';
 
 export default function SearchForm({
+  onChange,
   onSearch,
   isLoading,
 }: {
+  onChange: () => void;
   onSearch: (query: string) => void;
   isLoading: boolean;
 }) {
@@ -14,28 +17,30 @@ export default function SearchForm({
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (isLoading || query === '') return;
     onSearch(query);
   };
 
   const handleChange = (event: ChangeEvent) => {
+    onChange();
     const sanitized = sanitizeInput(event.target.value);
     setQuery(sanitized);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        autoCorrect="off"
-        placeholder="Search for videos, images, or audio..."
-        value={query}
-        onChange={handleChange}
-        name="query"
-        disabled={isLoading}
-      />
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Searching...' : 'Search'}
-      </button>
+    <form onSubmit={handleSubmit} className="flex justify-center mb-4 md:mb-8">
+      <label className="input input-accent input-lg rounded-full">
+        <SearchIcon />
+        <input
+          type="search"
+          placeholder="Search"
+          autoComplete="off"
+          autoCorrect="off"
+          value={query}
+          onChange={handleChange}
+          name="query"
+        />
+      </label>
     </form>
   );
 }

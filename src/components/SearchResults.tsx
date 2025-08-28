@@ -1,44 +1,50 @@
+import AssetCard from '@/components/AssetCard';
+import SquareGrid from '@/components/SquareGrid';
+
 export default function SearchResults({
   results,
   isLoading,
   error,
-  hasSearched,
 }: {
-  results: ImageResults;
+  results: ImageResult[];
   isLoading: boolean;
-  error: string | null;
-  hasSearched: boolean;
+  error: string | false;
 }) {
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: 'red' }}>Error: {error}</p>;
-  }
-
-  if (hasSearched && results.length === 0) {
-    return <p>No results found.</p>;
-  }
-
-  if (!hasSearched || results.length === 0) {
-    return null;
-  }
+  const alertClass = 'alert h-32 flex justify-center rounded-lg';
 
   return (
-    <div>
-      {results.map((result) => (
-        <div key={result.id}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={result.thumbnail_url}
-            alt={result.title}
-            width={100}
-            height={100}
-          />
-          <h3>{result.title}</h3>
+    <>
+      {isLoading ? (
+        <div data-testid="LoadingSearchResults" className={alertClass}>
+          <span className="loading loading-dots loading-lg"></span>
         </div>
-      ))}
-    </div>
+      ) : error ? (
+        <div
+          role="alert"
+          data-testid="SearchError"
+          className={`alert-error alert-dash ${alertClass}`}
+        >
+          <span>An unexpected error occured, please try again later.</span>
+        </div>
+      ) : results.length === 0 ? (
+        <div
+          role="alert"
+          data-testid="NoResults"
+          className={`alert-info alert-dash ${alertClass}`}
+        >
+          <span>No results found.</span>
+        </div>
+      ) : (
+        <SquareGrid
+          items={results.map((result) => {
+            const { id, ...props } = result;
+            return {
+              key: id,
+              item: <AssetCard {...props} />,
+            };
+          })}
+        />
+      )}
+    </>
   );
 }

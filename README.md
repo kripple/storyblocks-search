@@ -32,18 +32,25 @@ npm run dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Assumptions & Trade-offs
+## Trade-offs
 
-- **Regular `<img>` tags instead of Next.js `Image` component**: Used standard HTML img elements to avoid the complexity of configuring remote image domains for external APIs. This simplifies deployment and works reliably with unknown image sources, though it foregoes Next.js image optimizations.
+- **Regular `<img>` tags instead of Next.js `Image` component**: Used standard HTML img elements to avoid the complexity of configuring remote image domains for external APIs. This simplifies development at the cost of Next.js image optimizations.
 - **Images only**: Focused on the images endpoint to reduce scope. The Storyblocks API also supports video and audio endpoints, but implementing multiple content types would add complexity in both the API integration and UI components.
+- **No deployment setup**: Kept the project local-only to focus on core functionality within the timeboxed scope. While the app could be deployed to platforms like Vercel or Netlify, setting up deployment pipelines and environment variable management would add complexity.
+- **Simple hardcoded mocks instead of MSW**: Used hardcoded conditional mocking rather than a more robust tool like Mock Service Worker (MSW) due to time constraints. MSW would provide better test isolation and more maintainable mocks for a production application.
+- **Single page results only**: To limit scope, the app fetches and displays only the first page of up to 20 search results.
+- **No user id**: For simplicity, requests randomly generate a user_id.
+- **Keywords only**: The Storyblocks API supports a number of filters and advanced search options, but this application only performs a keyword search with default sorting.
+- one endpoint to reduce complexity
 
-## Tech Stack
+## Assumptions
 
-- Next.js 15 with App Router
-- TypeScript
-- React 18
-- daisyUI
+- **Keywords have no special characters**: Stripped the search input value of everything but letters, numbers, and spaces.
 
-## AI Tools Used
+## Tools & Technologies
 
-- Claude for project structure and development
+- Frontend framework: Next.js 15 + App Router
+- Programming language: TypeScript
+- UI/Design: daisyUI
+- Testing: Playwright
+- AI: Claude (for project structure and development)
