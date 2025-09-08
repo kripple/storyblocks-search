@@ -7,7 +7,7 @@ export function buildAuthenticatedUrl({
   user_id,
   additionalParams = {},
 }: {
-  resource: string;
+  resource: SearchEndpoint;
   publicKey: string;
   privateKey: string;
   user_id: string;
@@ -15,15 +15,16 @@ export function buildAuthenticatedUrl({
 }) {
   const project_id = 'test-project-storyblocks-search';
   const baseUrl = 'https://api.storyblocks.com';
+  const endpoint = `/api/v2/${resource}/search`;
 
   // HMAC generation
   const expires = Math.floor(Date.now() / 1000) + 3600;
   const hmacBuilder = createHmac('sha256', privateKey + expires);
-  hmacBuilder.update(resource);
+  hmacBuilder.update(endpoint);
   const hmac = hmacBuilder.digest('hex');
 
   // Build the full URL with auth params
-  const url = new URL(baseUrl + resource);
+  const url = new URL(baseUrl + endpoint);
   url.searchParams.set('APIKEY', publicKey);
   url.searchParams.set('EXPIRES', expires.toString());
   url.searchParams.set('HMAC', hmac);

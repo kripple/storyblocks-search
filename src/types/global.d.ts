@@ -13,3 +13,5 @@ declare type ImageResponseData = {
   total_results: number;
   results: ImageResult[];
 };
+
+declare type SearchEndpoint = 'videos' | 'audio' | 'images';

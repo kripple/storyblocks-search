@@ -10,7 +10,8 @@ export async function fetchData({
   mockData: typeof searchResponseData;
 }) {
   const useMockData =
-    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
+    process.env.ENABLE_MOCK_API &&
+    (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test');
 
   if (!useMockData) {
     const response = await fetch(url);

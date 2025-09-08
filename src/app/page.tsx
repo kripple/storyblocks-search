@@ -9,6 +9,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [hasSearched, setHasSearched] = useState(false);
+  const [resource, setResource] = useState<SearchEndpoint>('images');
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -17,8 +18,12 @@ export default function HomePage() {
 
     try {
       const keywords = query.replaceAll(' ', ',');
-      const response = await fetch(`/api/search?query=${keywords}`);
-
+      const params = new URLSearchParams({
+        query: keywords,
+        resource: resource,
+      });
+      const response = await fetch(`/api/search?${params}`);
+    
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(

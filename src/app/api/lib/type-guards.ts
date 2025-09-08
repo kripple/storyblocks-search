@@ -20,3 +20,7 @@ export function isImageResults(data: unknown): data is ImageResult[] {
     })
   );
 }
+
+export function isSearchEndpoint(value?: string): value is SearchEndpoint {
+  return ['images', 'audio', 'videos'].includes(value);
+}
