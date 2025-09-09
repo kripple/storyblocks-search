@@ -13,7 +13,7 @@ export default function AssetCard({
     <Image
       src={thumbnail_url}
       alt={title}
-      className="rounded-md w-full h-full aspect-square object-cover object-top"
+      className="rounded-md w-full h-full aspect-square object-cover object-top bg-base-100"
     />
   );
   const [isVisible, setIsVisible] = useState(false);
