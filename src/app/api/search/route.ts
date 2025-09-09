@@ -45,12 +45,30 @@ export async function GET(request: NextRequest) {
   });
 
   try {
-    return await handleRequest({
+    const response = await handleRequest({
       url: searchUrl,
       identifier: query,
       mockData: searchResponseData,
-      validator: isSearchResults,
       logMessage: 'Fetching from Storyblocks:',
+    });
+    const data = await response.json();
+
+    if (!isSearchResults(data)) {
+      return NextResponse.json(
+        { error: 'Unexpected API Response' },
+        { status: 500 },
+      );
+    }
+
+    const totalPages = Math.ceil(data.total_results / per_page);
+    return NextResponse.json({
+      data,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        hasMore: page < totalPages,
+      },
+      query,
     });
   } catch (error) {
     console.error('Search API error:', error);

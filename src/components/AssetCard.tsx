@@ -46,9 +46,12 @@ export default function AssetCard({
         isHovered ? 'opacity-100' : 'opacity-0'
       } transition-opacity duration-300 w-full h-full`}
     >
-      <div className={`rounded-md relative h-full w-full flex justify-center`}>
+      {/* <figure> is needed to apply the daisy card overlay styles */}
+      <figure
+        className={`rounded-md relative h-full w-full flex justify-center`}
+      >
         {image}
-      </div>
+      </figure>
       <div className="card-body p-0 m-2 lg:m-3 aspect-square overflow-hidden text-xs md:text-sm lg:text-base">
         {title}
       </div>

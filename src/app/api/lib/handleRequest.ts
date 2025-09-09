@@ -6,13 +6,11 @@ export async function handleRequest({
   url,
   identifier,
   mockData,
-  validator,
   logMessage,
 }: {
   url: URL;
   identifier: string;
   mockData: typeof searchResponseData;
-  validator: (data: unknown) => boolean;
   logMessage: string;
 }) {
   console.log(
@@ -39,14 +37,5 @@ export async function handleRequest({
     );
   }
 
-  const data = await response.json();
-
-  if (!validator(data)) {
-    return NextResponse.json(
-      { error: 'Unexpected API Response' },
-      { status: 500 },
-    );
-  }
-
-  return NextResponse.json(data);
+  return response;
 }

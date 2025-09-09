@@ -31,9 +31,23 @@ declare type SearchResult = {
   aspectRatio?: string;
 } & (AudioAttributes | ImageAttributes | VideoAttributes);
 
-declare type SearchResponseData = {
-  total_results: number;
-  results: SearchResult[];
+declare type SearchEndpoint = 'videos' | 'audio' | 'images';
+
+declare type SearchParams = {
+  query: string;
+  page?: number;
+  resource: SearchEndpoint;
 };
 
-declare type SearchEndpoint = 'videos' | 'audio' | 'images';
+declare type SearchResponse = {
+  data: {
+    total_results: number;
+    results: SearchResult[];
+  };
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    hasMore: boolean;
+  };
+  query: string;
+};

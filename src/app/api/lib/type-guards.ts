@@ -1,4 +1,4 @@
-export function isSearchResults(data: unknown): data is SearchResponseData {
+export function isSearchResults(data: unknown): data is SearchResponse['data'] {
   if (typeof data !== 'object' || data === null) return false;
 
   const obj = data as Record<string, unknown>;

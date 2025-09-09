@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearch } from '@/hooks/useSearch';
 import SearchForm from '@/components/SearchForm';
 import SearchResults from '@/components/SearchResults';
 
@@ -13,6 +14,7 @@ export default function HomePage() {
   const [resourceId, setResourceId] = useState<ResourceId>(1);
   const resource = resources[resourceId];
   const [results, setResults] = useState<SearchResult[]>([]);
+  const search = useSearch();
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -21,21 +23,11 @@ export default function HomePage() {
 
     try {
       const keywords = query.replaceAll(' ', ',');
-      const params = new URLSearchParams({
+      const response = await search({
         query: keywords,
         resource,
       });
-      const response = await fetch(`/api/search?${params}`);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error || `HTTP error! status: ${response.status}`,
-        );
-      }
-
-      const searchData: SearchResponseData = await response.json();
-      setResults(searchData.results);
+      setResults(response.data.results);
     } catch (err) {
       console.error('Search error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
