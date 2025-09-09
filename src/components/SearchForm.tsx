@@ -1,17 +1,18 @@
-import { useState } from 'react';
 import { IoIosSearch as SearchIcon } from 'react-icons/io';
 
 export default function SearchForm({
   onChange,
   onSearch,
   isLoading,
+  query,
+  setQuery,
 }: {
   onChange: () => void;
   onSearch: (query: string) => void;
   isLoading: boolean;
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [query, setQuery] = useState<string>('');
-
   const sanitizeInput = (value: string) =>
     value.replaceAll(/[^a-zA-Z0-9\s]/g, '');
 

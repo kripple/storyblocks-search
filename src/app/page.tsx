@@ -9,6 +9,8 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [hasSearched, setHasSearched] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<string>('');
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -17,7 +19,9 @@ export default function HomePage() {
 
     try {
       const keywords = query.replaceAll(' ', ',');
-      const response = await fetch(`/api/search?query=${keywords}`);
+      const response = await fetch(
+        `/api/search?query=${keywords}&page=${page}`,
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -55,6 +59,8 @@ export default function HomePage() {
       </h1>
 
       <SearchForm
+        query={query}
+        setQuery={setQuery}
         onSearch={handleSearch}
         isLoading={isLoading}
         onChange={handleChange}
@@ -63,6 +69,16 @@ export default function HomePage() {
       {hasSearched ? (
         <SearchResults results={results} isLoading={isLoading} error={error} />
       ) : null}
+
+      <button
+        onClick={() => {
+          setPage((current) => current + 1);
+          handleSearch(query);
+        }}
+        className="btn btn-primary w-full mt-2"
+      >
+        Current page: {page}, Click to load more!
+      </button>
     </div>
   );
 }
