@@ -11,7 +11,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
   const page = parseInt(searchParams.get('page') || '1');
-  const per_page = parseInt(searchParams.get('per_page') || '20');
+  const results_per_page = parseInt(
+    searchParams.get('results_per_page') || '20',
+  );
   const user_id = 'test-user-' + nanoid();
 
   if (!query) {
@@ -36,7 +38,7 @@ export async function GET(request: NextRequest) {
     additionalParams: {
       keywords: query,
       page: page.toString(),
-      per_page: per_page.toString(),
+      results_per_page: results_per_page.toString(),
     },
   });
 
