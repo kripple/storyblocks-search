@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearch } from '@/hooks/useSearch';
+import { useSearch, useInfiniteSearch } from '@/hooks/useSearch';
 import SearchForm from '@/components/SearchForm';
 import SearchResults from '@/components/SearchResults';
 
@@ -13,15 +13,8 @@ export default function HomePage() {
   type ResourceId = 0 | 1 | 2;
   const [resourceId, setResourceId] = useState<ResourceId>(1);
   const resource = resources[resourceId];
-  const [response, setResponse] = useState<SearchResponse | null>();
+  const [response, setResponse] = useState<SearchResponse>();
   const search = useSearch();
-
-  // const loadMore = async () => {
-  //   const nextPage = currentPage + 1;
-  //   const response = await search({ query: currentQuery, page: nextPage });
-  //   setResults((prev) => [...prev, ...response.data.results]); // Append new results
-  //   setCurrentPage(nextPage);
-  // };
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -34,7 +27,6 @@ export default function HomePage() {
         query: keywords,
         resource,
       });
-      console.log(searchResponse);
       setResponse(searchResponse);
     } catch (err) {
       console.error('Search error:', err);
@@ -80,14 +72,14 @@ export default function HomePage() {
       <h1 className="text-center text-4xl font-bold font-serif mt-4 mb-4 md:mb-8 flex justify-center items-center gap-2 flex-wrap">
         Storyblocks
         <div className="dropdown">
-          <span
+          <div
             tabIndex={0}
             role="button"
             className="capitalize btn btn-xl btn-ghost text-4xl rounded-sm p-4 w-46 h-16"
           >
             {resourceToString(resource)}{' '}
             <span className="ml-1 p-1">{chevronDown}</span>
-          </span>
+          </div>
           <ul tabIndex={0} className="dropdown-content menu z-1 w-46">
             {resources.map((item, index) =>
               index === resourceId ? null : (
@@ -99,7 +91,7 @@ export default function HomePage() {
                       : index === 1
                       ? 'btn-secondary'
                       : 'btn-accent'
-                  } btn-soft text-4xl capitalize p-4 py-8 shadow-sm mb-2 h-16`}
+                  } btn-soft text-4xl capitalize p-4 py-8 rounded-sm shadow-sm mb-2 h-16`}
                   key={item}
                 >
                   {resourceToString(item)}
@@ -115,21 +107,17 @@ export default function HomePage() {
         onSearch={handleSearch}
         isLoading={isLoading}
         onChange={handleChange}
-      />
-
-      {hasSearched ? (
-        <SearchResults
-          results={response?.data.results}
-          isLoading={isLoading}
-          error={error}
-        />
-      ) : null}
-
-      {response?.pagination.hasMore ? (
-        <button className="btn btn-ghost mt-2 w-full">
-          Load more results ({response?.pagination.resultsRemaining})
-        </button>
-      ) : null}
+        hasMore={response?.pagination.hasMore}
+        resultsRemaining={response?.pagination.resultsRemaining}
+      >
+        {hasSearched && response?.requestParams.resource === resource ? (
+          <SearchResults
+            results={response?.data.results}
+            isLoading={isLoading}
+            error={error}
+          />
+        ) : null}
+      </SearchForm>
     </div>
   );
 }

@@ -61,17 +61,22 @@ export async function GET(request: NextRequest) {
     }
 
     const totalPages = Math.ceil(data.total_results / per_page);
-    const resultsRemaining = data.total_results - (page * per_page);
-    return NextResponse.json({
+    const resultsRemaining = data.total_results - page * per_page;
+    const searchResponse: SearchResponse = {
       data,
       pagination: {
         currentPage: page,
         totalPages,
         hasMore: page < totalPages,
-        resultsRemaining
+        resultsRemaining,
       },
-      query,
-    });
+      requestParams: {
+        page,
+        query,
+        resource,
+      },
+    };
+    return NextResponse.json(searchResponse);
   } catch (error) {
     console.error('Search API error:', error);
     return NextResponse.json(

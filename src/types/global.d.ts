@@ -50,5 +50,5 @@ declare type SearchResponse = {
     hasMore: boolean;
     resultsRemaining: number;
   };
-  query: string;
+  requestParams: SearchParams;
 };
