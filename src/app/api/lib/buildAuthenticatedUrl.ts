@@ -30,6 +30,8 @@ export function buildAuthenticatedUrl({
   url.searchParams.set('HMAC', hmac);
   url.searchParams.set('user_id', user_id);
   url.searchParams.set('project_id', project_id);
+  url.searchParams.set('safe_search', 'true');
+  url.searchParams.set('extended', ['description', 'aspectRatio'].join(','));
 
   // Add any additional parameters
   Object.entries(additionalParams).forEach(([key, value]) => {

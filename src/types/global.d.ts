@@ -27,6 +27,8 @@ declare type SearchResult = {
   thumbnail_url: string;
   type: string;
   is_new: boolean;
+  description?: string;
+  aspectRatio?: string;
 } & (AudioAttributes | ImageAttributes | VideoAttributes);
 
 declare type SearchResponseData = {
