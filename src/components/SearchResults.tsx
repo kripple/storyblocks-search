@@ -6,7 +6,7 @@ export default function SearchResults({
   isLoading,
   error,
 }: {
-  results: ImageResult[];
+  results: SearchResult[];
   isLoading: boolean;
   error: string | false;
 }) {
@@ -37,10 +37,9 @@ export default function SearchResults({
       ) : (
         <SquareGrid
           items={results.map((result) => {
-            const { id, ...props } = result;
             return {
-              key: id,
-              item: <AssetCard {...props} />,
+              key: result.id,
+              item: <AssetCard {...result} />,
             };
           })}
         />

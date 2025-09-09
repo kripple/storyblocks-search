@@ -3,17 +3,19 @@ import Image from '@/components/Image';
 import AssetPreview from '@/components/AssetPreview';
 
 export default function AssetCard({
-  preview_url,
   thumbnail_url,
   title,
-}: {
-  preview_url: string;
-  thumbnail_url: string;
-  title: string;
-}) {
+  ...props
+}: SearchResult) {
   const [, setShowPreview] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const image = <Image src={thumbnail_url} alt={title} />;
+  const image = (
+    <Image
+      src={thumbnail_url}
+      alt={title}
+      className="rounded-md w-full h-full aspect-square object-cover object-top"
+    />
+  );
   const [isVisible, setIsVisible] = useState(false);
 
   const openPreview = () => {
@@ -44,11 +46,9 @@ export default function AssetCard({
         isHovered ? 'opacity-100' : 'opacity-0'
       } transition-opacity duration-300 w-full h-full`}
     >
-      <figure
-        className={`rounded-md relative h-full w-full flex justify-center`}
-      >
+      <div className={`rounded-md relative h-full w-full flex justify-center`}>
         {image}
-      </figure>
+      </div>
       <div className="card-body p-0 m-2 lg:m-3 aspect-square overflow-hidden text-xs md:text-sm lg:text-base">
         {title}
       </div>
@@ -72,7 +72,15 @@ export default function AssetCard({
       <AssetPreview
         open={isVisible}
         onClose={closePreview}
-        preview_url={preview_url}
+        audioSrc={
+          props.contentClass === 'audio' ? props.preview_url : undefined
+        }
+        imageSrc={
+          props.contentClass !== 'image' ? thumbnail_url : props.preview_url
+        }
+        videoSources={
+          props.contentClass === 'video' ? props.preview_urls : undefined
+        }
         description={title}
       />
     </>
