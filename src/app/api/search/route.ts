@@ -61,12 +61,14 @@ export async function GET(request: NextRequest) {
     }
 
     const totalPages = Math.ceil(data.total_results / per_page);
+    const resultsRemaining = data.total_results - (page * per_page);
     return NextResponse.json({
       data,
       pagination: {
         currentPage: page,
         totalPages,
         hasMore: page < totalPages,
+        resultsRemaining
       },
       query,
     });

@@ -13,8 +13,15 @@ export default function HomePage() {
   type ResourceId = 0 | 1 | 2;
   const [resourceId, setResourceId] = useState<ResourceId>(1);
   const resource = resources[resourceId];
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [response, setResponse] = useState<SearchResponse | null>();
   const search = useSearch();
+
+  // const loadMore = async () => {
+  //   const nextPage = currentPage + 1;
+  //   const response = await search({ query: currentQuery, page: nextPage });
+  //   setResults((prev) => [...prev, ...response.data.results]); // Append new results
+  //   setCurrentPage(nextPage);
+  // };
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -23,15 +30,16 @@ export default function HomePage() {
 
     try {
       const keywords = query.replaceAll(' ', ',');
-      const response = await search({
+      const searchResponse = await search({
         query: keywords,
         resource,
       });
-      setResults(response.data.results);
+      console.log(searchResponse);
+      setResponse(searchResponse);
     } catch (err) {
       console.error('Search error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
-      setResults([]);
+      setResponse(undefined);
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +51,7 @@ export default function HomePage() {
     if (error) {
       setError(undefined);
     }
-    if (results.length === 0) {
+    if (response?.data.results.length === 0) {
       setHasSearched(false);
     }
   };
@@ -110,7 +118,17 @@ export default function HomePage() {
       />
 
       {hasSearched ? (
-        <SearchResults results={results} isLoading={isLoading} error={error} />
+        <SearchResults
+          results={response?.data.results}
+          isLoading={isLoading}
+          error={error}
+        />
+      ) : null}
+
+      {response?.pagination.hasMore ? (
+        <button className="btn btn-ghost mt-2 w-full">
+          Load more results ({response?.pagination.resultsRemaining})
+        </button>
       ) : null}
     </div>
   );

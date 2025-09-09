@@ -48,6 +48,7 @@ declare type SearchResponse = {
     currentPage: number;
     totalPages: number;
     hasMore: boolean;
+    resultsRemaining: number;
   };
   query: string;
 };
