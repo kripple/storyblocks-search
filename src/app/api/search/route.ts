@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { getEnv } from '@/app/api/lib/getEnv';
 import { buildAuthenticatedUrl } from '@/app/api/lib/buildAuthenticatedUrl';
 import { handleRequest } from '@/app/api/lib/handleRequest';
-import { isImageResults, isSearchEndpoint } from '@/app/api/lib/type-guards';
+import { isSearchResults, isSearchEndpoint } from '@/app/api/lib/type-guards';
 import { searchResponseData } from '@/app/api/lib/mockData';
 
 export async function GET(request: NextRequest) {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       url: searchUrl,
       identifier: query,
       mockData: searchResponseData,
-      validator: isImageResults,
+      validator: isSearchResults,
       logMessage: 'Fetching from Storyblocks:',
     });
   } catch (error) {

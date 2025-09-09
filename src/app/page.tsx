@@ -5,11 +5,11 @@ import SearchForm from '@/components/SearchForm';
 import SearchResults from '@/components/SearchResults';
 
 export default function HomePage() {
-  const [results, setResults] = useState<ImageResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [hasSearched, setHasSearched] = useState(false);
-  const [resource, setResource] = useState<SearchEndpoint>('images');
+  const [resource, setResource] = useState<SearchEndpoint>('audio');
+  const [results, setResults] = useState<SearchResult[]>([]);
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -23,7 +23,7 @@ export default function HomePage() {
         resource: resource,
       });
       const response = await fetch(`/api/search?${params}`);
-    
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(
@@ -31,7 +31,7 @@ export default function HomePage() {
         );
       }
 
-      const searchData: ImageResponseData = await response.json();
+      const searchData: SearchResponseData = await response.json();
       setResults(searchData.results);
     } catch (err) {
       console.error('Search error:', err);
@@ -56,7 +56,11 @@ export default function HomePage() {
   return (
     <div className="container mx-auto p-1 sm:p-2 md:p-4 lg:p-8">
       <h1 className="text-center text-4xl font-bold font-serif mt-4 mb-4 md:mb-8">
-        Storyblocks Image Search
+        Storyblocks{' '}
+        <span className="capitalize">
+          {resource.endsWith('s') ? resource.slice(0, -1) : resource}
+        </span>{' '}
+        Search
       </h1>
 
       <SearchForm
